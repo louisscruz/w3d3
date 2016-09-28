@@ -1,0 +1,28 @@
+puts "Input your email:"
+
+email = gets.chomp
+user = User.find_by(email: email)
+
+p user
+
+puts "What do you want to do, punk?"
+puts "0. Create shortened URL (lazy, bro?)"
+puts "1. Visit shortened URL"
+
+choice = gets.chomp.to_i
+
+case choice
+when 0
+  puts "What's your url, punk?"
+  long_url = gets.chomp
+  short_url = ShortenedUrl.create_for_user_and_long_url!(user, long_url)
+
+  puts "Punk, your short url is: #{short_url.short_url}"
+when 1
+  puts "Type in the shortened URL, punk."
+  shortened_url = gets.chomp
+  visit = Visit.record_visit!(user, shortened_url)
+  puts "Launching it, punk..."
+end
+
+puts "Bye, punk."
