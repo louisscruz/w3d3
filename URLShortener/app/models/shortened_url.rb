@@ -4,10 +4,17 @@ class ShortenedUrl < ActiveRecord::Base
     foreign_key: :user_id,
     class_name: :User
 
-  has_many :visitors,
+  has_many :visits,
     primary_key: :id,
     foreign_key: :shortened_url_id,
     class_name: :Visit
+
+  has_many :visitors,
+    # primary_key: :id,
+    # foreign_key: :shortened_url_id,
+    # class_name: :Visit
+    through: :visits,
+    source: :visitors
 
   validates :long_url, :short_url, presence: true, uniqueness: true
 
