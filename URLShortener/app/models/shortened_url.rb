@@ -24,6 +24,22 @@ class ShortenedUrl < ActiveRecord::Base
     source: :tag_topic
 
   validates :long_url, :short_url, presence: true, uniqueness: true
+  validates :long_url, length: { maximum: 1024 }
+
+  validate :limit_urls
+  validate :premium_limit
+
+  def limit_urls
+    if self.submitter.num_recent_url_creations >= 5
+      self.errors[:submitter] << "over the limit"
+    end
+  end
+
+  def premium_limit
+    if !self.submitter.premium && self.submitter.submitted_urls.count > 5
+      self.errors[:submitter] << "non-premium users have a limit of 5"
+    end
+  end
 
   def self.random_code
     begin
@@ -34,6 +50,10 @@ class ShortenedUrl < ActiveRecord::Base
 
   def self.create_for_user_and_long_url!(user, long_url)
     create!(long_url: long_url, short_url: self.random_code, user_id: user.id)
+  end
+
+  def self.prune
+    self.where("created_at < ?", 2.hours.ago).destroy
   end
 
   def num_clicks

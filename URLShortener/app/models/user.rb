@@ -14,4 +14,9 @@ class User < ActiveRecord::Base
     source: :shortened_urls
 
   validates :email, presence: true, uniqueness: true
+
+  def num_recent_url_creations
+    submitted_urls.where("created_at > ?", 1.minutes.ago).count
+  end
+
 end
