@@ -15,3 +15,9 @@ link2 = ShortenedUrl.create_for_user_and_long_url!(sam, "https://facebook.com")
 visit1 = Visit.record_visit!(louis, link2)
 visit2 = Visit.record_visit!(sam, link2)
 visit3 = Visit.record_visit!(sam, link2)
+
+topic1 = TagTopic.create!(title: "Politics")
+topic2 = TagTopic.create!(title: "Boats")
+
+tag1 = Tagging.create!(shortened_url_id: link2.id, tag_topic_id: topic2.id)
+tag2 = Tagging.create!(shortened_url_id: link1.id, tag_topic_id: topic2.id)

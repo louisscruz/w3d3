@@ -6,7 +6,7 @@ user = User.find_by(email: email)
 p user
 
 puts "What do you want to do, punk?"
-puts "0. Create shortened URL (lazy, bro?)"
+puts "0. Create shortened URL (lazy, punk?)"
 puts "1. Visit shortened URL"
 
 choice = gets.chomp.to_i
@@ -16,6 +16,18 @@ when 0
   puts "What's your url, punk?"
   long_url = gets.chomp
   short_url = ShortenedUrl.create_for_user_and_long_url!(user, long_url)
+
+  puts "How many tags would you like to add, punk?"
+
+  number_of_tags = gets.chomp.to_i
+
+  number_of_tags.times do
+    puts "Give me your tag, punk."
+    tag_title = gets.chomp
+
+    TagTopic.handle_tag_creation!(short_url, tag_title)
+    puts "#{tag_title} added, punk."
+  end
 
   puts "Punk, your short url is: #{short_url.short_url}"
 when 1
